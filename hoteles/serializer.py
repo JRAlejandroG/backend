@@ -5,7 +5,7 @@ class HotelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Hotel
         #fields = '__all__' esto es para que muestre todos los campos de la tabla
-        fields = ['nombre', 'direccion', 'telefono', 'email', 'descripcion', 'created_at', 'updated_at']
+        fields = ['nombre', 'direccion', 'telefono', 'email_contacto', 'descripcion', 'created_at', 'updated_at']
 
 class HabitacionSerializer(serializers.ModelSerializer):
     class Meta:
