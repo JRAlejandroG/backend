@@ -1,4 +1,7 @@
 from django.db import models
+from datetime import datetime
+
+
 
 class Hotel(models.Model):
     nombre = models.CharField(max_length=100)
