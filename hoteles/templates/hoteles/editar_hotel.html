@@ -1,0 +1,28 @@
+
+{% extends 'hoteles/base.html' %}
+
+{% block title %}Editar hotel | LaManchaland{% endblock %}
+
+{% block content %}
+
+<div class="card form-container">
+
+    <h2>Editar hotel</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit" class="btn-home">
+            Guardar cambios
+        </button>
+    </form>
+
+    <a href="{% url 'lista_hoteles' %}" class="btn-home">
+        Volver a la lista
+    </a>
+
+</div>
+
+{% endblock %}

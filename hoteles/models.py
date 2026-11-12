@@ -6,7 +6,10 @@ from datetime import date
 class Hotel(models.Model):
     nombre = models.CharField(max_length=100)
     direccion = models.CharField(max_length=200)
-    categoria_estrellas = models.IntegerField(default=5)
+    categoria_estrellas = models.IntegerField(
+    default=5,
+    choices=[(i, f'{i} estrellas') for i in range(1, 6)]
+)
     telefono = models.CharField(max_length=20)
     email_contacto = models.EmailField()
     descripcion = models.TextField()

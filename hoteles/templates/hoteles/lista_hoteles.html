@@ -1,0 +1,79 @@
+
+{% extends 'hoteles/base.html' %}
+
+{% block title %}Nuestros hoteles | LaManchaland{% endblock %}
+
+{% block content %}
+
+<div class="hotel-heading">
+    <div>
+        <h2>Nuestros hoteles</h2>
+        <p>Gestiona los alojamientos de nuestro reino.</p>
+    </div>
+
+    <a href="{% url 'crear_hotel' %}" class="btn-crear">
+        + Registrar hotel
+    </a>
+</div>
+
+<div class="card-grid">
+
+    {% for hotel in hoteles %}
+
+        <div class="hotel-card">
+
+            <div class="hotel-card-header">
+                <h3>{{ hotel.nombre }}</h3>
+
+                {% if hotel.activo %}
+                    <span class="estado activo">Activo</span>
+                {% else %}
+                    <span class="estado inactivo">Inactivo</span>
+                {% endif %}
+            </div>
+
+            <div class="hotel-info">
+                <p><strong>Dirección</strong>{{ hotel.direccion }}</p>
+                <p><strong>Categoría</strong>{{ hotel.categoria_estrellas }} estrellas</p>
+                <p><strong>Teléfono</strong>{{ hotel.telefono }}</p>
+                <p><strong>Correo</strong>{{ hotel.email_contacto }}</p>
+                <p><strong>Descripción</strong>{{ hotel.descripcion }}</p>
+            </div>
+
+            <div class="hotel-actions">
+
+                <a href="{% url 'editar_hotel' hotel.pk %}" class="btn-editar">
+                    Editar hotel
+                </a>
+
+                <form method="POST" action="{% url 'cambiar_estado_hotel' hotel.pk %}">
+                    {% csrf_token %}
+
+                    <button type="submit"
+                            class="{% if hotel.activo %}btn-desactivar{% else %}btn-activar{% endif %}">
+                        {% if hotel.activo %}
+                            Desactivar
+                        {% else %}
+                            Activar
+                        {% endif %}
+                    </button>
+                </form>
+
+            </div>
+
+        </div>
+
+    {% empty %}
+
+        <div class="empty-hotels">
+            <h3>No hay hoteles registrados</h3>
+            <p>Las puertas de LaManchaland aún esperan nuevos alojamientos.</p>
+        </div>
+
+    {% endfor %}
+
+</div>
+
+<a href="{% url 'home' %}" class="btn-volver">Volver al inicio</a>
+
+{% endblock %}

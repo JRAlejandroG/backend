@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}LaManchaland Hotel{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'hoteles/css/estilos.css' %}">
+</head>
+<body>
+    <header>
+    <div class="avatar-container">
+    {% if request.path == '/ruta-invalida-404' %}
+        <img src="{% static 'hoteles/img/sadncho.jpg' %}" alt="Sancho">
+    {% else %}
+        <img src="{% static 'hoteles/img/sancho.jpg' %}" alt="Gerente Sancho">
+    {% endif %}
+</div>
+
+    <h1>LaManchaland Hotel</h1>
+    <p>Donde los sueños y las atracciones nunca terminan...</p>
+</header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2026 LaManchaland Hotel</p>
+    </footer>
+</body>
+</html>
