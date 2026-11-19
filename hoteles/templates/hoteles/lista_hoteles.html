@@ -1,4 +1,3 @@
-
 {% extends 'hoteles/base.html' %}
 
 {% block title %}Nuestros hoteles | LaManchaland{% endblock %}
@@ -41,6 +40,10 @@
             </div>
 
             <div class="hotel-actions">
+
+                <a href="{% url 'gestion_hotel' hotel.pk %}" class="btn-gestionar">
+                    Gestionar habitaciones
+                </a>
 
                 <a href="{% url 'editar_hotel' hotel.pk %}" class="btn-editar">
                     Editar hotel

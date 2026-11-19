@@ -21,6 +21,7 @@ class Hotel(models.Model):
         return self.nombre
 
 
+
 class Habitacion(models.Model):
     TIPOS_HABITACION = [
         ('IND', 'Individual'),
@@ -28,24 +29,47 @@ class Habitacion(models.Model):
         ('SUI', 'Suite Temática LaManchaland'),
     ]
 
+    ESTADOS_HABITACION = [
+        ('DIS', 'Disponible'),
+        ('OCU', 'Ocupada'),
+        ('RES', 'Reservada'),
+        ('MAN', 'Mantenimiento'),
+    ]
+
     hotel = models.ForeignKey(
         Hotel,
         on_delete=models.CASCADE,
         related_name='habitaciones'
     )
+
     numero = models.CharField(max_length=10)
+
+    piso = models.PositiveIntegerField(default=1)
+
     tipo = models.CharField(
         max_length=3,
         choices=TIPOS_HABITACION,
         default='IND'
     )
+
+    estado = models.CharField(
+        max_length=3,
+        choices=ESTADOS_HABITACION,
+        default='DIS'
+    )
+
     capacidad_personas = models.IntegerField(default=2)
+
     precio_por_noche = models.DecimalField(
         max_digits=10,
         decimal_places=2
     )
+
+    # Se conserva temporalmente por compatibilidad
     disponible = models.BooleanField(default=True)
+
     detalles = models.TextField(blank=True, null=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -131,3 +155,4 @@ class Reserva(models.Model):
 
     def __str__(self):
         return f"Reserva #{self.id} - {self.huesped}"
+

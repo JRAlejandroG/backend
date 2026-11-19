@@ -1,11 +1,8 @@
-from django.shortcuts import render
-from django.views.generic import ListView
-from rest_framework import viewsets
-from django.views.generic import ListView, CreateView
-from django.views.generic import ListView, CreateView, UpdateView
 from django.shortcuts import render, get_object_or_404, redirect
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.urls import reverse
 from django.views.decorators.http import require_POST
-
+from rest_framework import viewsets
 
 from .models import Hotel, Habitacion, Huesped, Reserva
 
@@ -65,6 +62,7 @@ class HotelCreateView(CreateView):
     ]
     success_url = '/hoteles/lista/'
 
+
 class HotelUpdateView(UpdateView):
     model = Hotel
     template_name = 'hoteles/editar_hotel.html'
@@ -78,7 +76,7 @@ class HotelUpdateView(UpdateView):
     ]
     success_url = '/hoteles/lista/'
 
-    # Activar o desactivar hotel
+
 @require_POST
 def cambiar_estado_hotel(request, pk):
     hotel = get_object_or_404(Hotel, pk=pk)
@@ -86,3 +84,74 @@ def cambiar_estado_hotel(request, pk):
     hotel.save()
 
     return redirect('lista_hoteles')
+
+
+def gestion_hotel(request, pk):
+    hotel = get_object_or_404(Hotel, pk=pk)
+
+    habitaciones = hotel.habitaciones.all().order_by('piso', 'numero')
+
+    pisos = {}
+    for habitacion in habitaciones:
+        pisos.setdefault(habitacion.piso, []).append(habitacion)
+
+    return render(request, 'hoteles/gestion_hotel.html', {
+        'hotel': hotel,
+        'pisos': pisos,
+    })
+
+
+class HabitacionCreateView(CreateView):
+    model = Habitacion
+    template_name = 'hoteles/crear_habitacion.html'
+    fields = [
+        'numero',
+        'piso',
+        'tipo',
+        'estado',
+        'capacidad_personas',
+        'precio_por_noche',
+        'detalles',
+    ]
+
+    def form_valid(self, form):
+        hotel = get_object_or_404(Hotel, pk=self.kwargs['pk'])
+        form.instance.hotel = hotel
+        form.instance.disponible = form.instance.estado == 'DIS'
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('gestion_hotel', kwargs={'pk': self.kwargs['pk']})
+
+
+class HabitacionUpdateView(UpdateView):
+    model = Habitacion
+    template_name = 'hoteles/editar_habitacion.html'
+    fields = [
+        'numero',
+        'piso',
+        'tipo',
+        'estado',
+        'capacidad_personas',
+        'precio_por_noche',
+        'detalles',
+    ]
+
+    def form_valid(self, form):
+        form.instance.disponible = form.instance.estado == 'DIS'
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('gestion_hotel', kwargs={
+            'pk': self.object.hotel.pk
+        })
+
+
+class HabitacionDeleteView(DeleteView):
+    model = Habitacion
+    template_name = 'hoteles/eliminar_habitacion.html'
+
+    def get_success_url(self):
+        return reverse('gestion_hotel', kwargs={
+            'pk': self.object.hotel.pk
+        })

@@ -1,0 +1,40 @@
+
+{% extends 'hoteles/base.html' %}
+
+{% block title %}Editar habitación | LaManchaland{% endblock %}
+
+{% block content %}
+
+<div class="form-container">
+    <h2>Editar habitación {{ object.numero }}</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {% for field in form %}
+            <div class="form-group">
+                <label>{{ field.label }}</label>
+                {{ field }}
+                {{ field.errors }}
+            </div>
+        {% endfor %}
+
+        <div class="hotel-actions">
+            <button type="submit" class="btn-crear">
+                Guardar cambios
+            </button>
+
+            <a href="{% url 'eliminar_habitacion' object.pk %}"
+               class="btn-desactivar">
+                Eliminar habitación
+            </a>
+
+            <a href="{% url 'gestion_hotel' object.hotel.pk %}"
+               class="btn-volver">
+                Cancelar
+            </a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

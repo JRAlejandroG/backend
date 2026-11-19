@@ -1,0 +1,31 @@
+{% extends 'hoteles/base.html' %}
+
+{% block title %}Agregar habitación | LaManchaland{% endblock %}
+
+{% block content %}
+
+<div class="form-container">
+    <h2>Agregar habitación</h2>
+    <p>Registrar una nueva habitación en {{ view.kwargs.pk }}.</p>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {% for field in form %}
+            <div class="form-group">
+                <label>{{ field.label }}</label>
+                {{ field }}
+                {{ field.errors }}
+            </div>
+        {% endfor %}
+
+        <div class="hotel-actions">
+            <button type="submit" class="btn-crear">Guardar habitación</button>
+            <a href="{% url 'gestion_hotel' view.kwargs.pk %}" class="btn-volver">
+                Cancelar
+            </a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

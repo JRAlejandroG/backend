@@ -21,3 +21,9 @@ class HuespedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Huesped
         fields = ['nombre', 'apellido', 'documento_identidad', 'email', 'telefono', 'created_at', 'updated_at']
+
+class HabitacionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Habitacion
+        fields = ['hotel','numero','piso','tipo','capacidad_personas','precio_por_noche','estado','disponible','detalles','created_at','updated_at']
+

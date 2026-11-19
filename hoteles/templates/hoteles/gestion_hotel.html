@@ -1,0 +1,72 @@
+
+{% extends 'hoteles/base.html' %}
+
+{% block title %}Gestión de habitaciones | LaManchaland{% endblock %}
+
+{% block content %}
+
+<div class="gestion-heading">
+    <div>
+        <h2>{{ hotel.nombre }}</h2>
+        <p>Distribución y gestión de habitaciones.</p>
+    </div>
+
+    <div class="hotel-actions">
+        <a href="{% url 'crear_habitacion' hotel.pk %}" class="btn-crear">
+            + Agregar habitación
+        </a>
+
+        <a href="{% url 'lista_hoteles' %}" class="btn-volver">
+            Volver a hoteles
+        </a>
+    </div>
+</div>
+
+<div class="edificio">
+
+    <div class="edificio-titulo">
+        <h3>Edificio principal</h3>
+        <span>{{ hotel.habitaciones.count }} habitaciones registradas</span>
+    </div>
+
+    {% for numero_piso, habitaciones in pisos.items %}
+        <div class="piso">
+
+            <div class="piso-etiqueta">
+                <span>PISO</span>
+                <strong>{{ numero_piso }}</strong>
+            </div>
+
+            <div class="habitaciones">
+                {% for habitacion in habitaciones %}
+                    <a href="{% url 'editar_habitacion' habitacion.pk %}"
+                       class="habitacion estado-{{ habitacion.estado|lower }}"
+                       title="Editar habitación {{ habitacion.numero }}">
+                        <span>{{ habitacion.numero }}</span>
+                    </a>
+                {% endfor %}
+            </div>
+
+        </div>
+    {% empty %}
+        <div class="edificio-vacio">
+            <h3>Edificio vacío</h3>
+            <p>Aún no hay habitaciones registradas en este hotel.</p>
+        </div>
+    {% endfor %}
+
+    <div class="ascensor">
+        <div class="ascensor-puertas"></div>
+        <span>ASCENSOR</span>
+    </div>
+
+</div>
+
+<div class="leyenda">
+    <span><i class="disponible"></i> Disponible</span>
+    <span><i class="ocupada"></i> Ocupada</span>
+    <span><i class="reservada"></i> Reservada</span>
+    <span><i class="mantenimiento"></i> Mantenimiento</span>
+</div>
+
+{% endblock %}
